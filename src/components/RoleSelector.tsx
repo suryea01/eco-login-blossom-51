@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Recycle, ShoppingBag, Truck, Bot, BadgeDollarSign, Leaf } from "lucide-react";
@@ -9,47 +10,55 @@ interface Role {
   title: string;
   description: string;
   icon: React.ElementType;
+  path: string;
 }
 
 export const RoleSelector = ({ onRoleSelect }: { onRoleSelect: (role: string) => void }) => {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const navigate = useNavigate();
   
   const roles: Role[] = [
     {
       id: "waste-seller",
       title: "Waste Seller",
       description: "Sell your recyclable waste",
-      icon: Recycle
+      icon: Recycle,
+      path: "/dashboard/waste-seller"
     },
     {
       id: "waste-buyer",
       title: "Waste Buyer / Recycler",
       description: "Purchase waste for recycling",
-      icon: BadgeDollarSign
+      icon: BadgeDollarSign,
+      path: "/dashboard/waste-buyer"
     },
     {
       id: "product-seller",
       title: "Product Seller / Upcycler",
       description: "Sell upcycled eco-products",
-      icon: Leaf
+      icon: Leaf,
+      path: "/dashboard/product-seller"
     },
     {
       id: "product-buyer",
       title: "Product Buyer",
       description: "Shop for sustainable products",
-      icon: ShoppingBag
+      icon: ShoppingBag,
+      path: "/dashboard/product-buyer"
     },
     {
       id: "delivery-volunteer",
       title: "Delivery Volunteer",
       description: "Help with pickups and deliveries",
-      icon: Truck
+      icon: Truck,
+      path: "/dashboard/delivery"
     },
     {
       id: "ai-assistant",
       title: "ECOBOT Assistant",
       description: "Get AI help with waste management",
-      icon: Bot
+      icon: Bot,
+      path: "/dashboard/ai-assistant"
     }
   ];
 
@@ -59,7 +68,12 @@ export const RoleSelector = ({ onRoleSelect }: { onRoleSelect: (role: string) =>
 
   const handleContinue = () => {
     if (selectedRole) {
-      onRoleSelect(selectedRole);
+      const selectedRoleData = roles.find(r => r.id === selectedRole);
+      if (selectedRoleData) {
+        localStorage.setItem('userRole', selectedRole);
+        onRoleSelect(selectedRole);
+        navigate(selectedRoleData.path);
+      }
     }
   };
 
