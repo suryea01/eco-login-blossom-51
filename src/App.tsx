@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { dashboardRoutes } from "./routes/dashboardRoutes";
+import { wasteSellerRoutes } from "./routes/wasteSellerRoutes";
 
 const queryClient = new QueryClient();
 
@@ -18,7 +18,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          {dashboardRoutes.map((route) => (
+          {[...dashboardRoutes, ...wasteSellerRoutes].map((route) => (
             <Route key={route.path} path={route.path} element={route.element} />
           ))}
           <Route path="*" element={<NotFound />} />
