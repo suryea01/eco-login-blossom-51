@@ -1,62 +1,144 @@
 
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
+import { DashboardLayout } from "@/components/DashboardLayout";
 
 interface DashboardRoute {
   path: string;
   element: ReactNode;
 }
 
-const DashboardLayout = ({ children }: { children: ReactNode }) => {
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {children}
+// Waste Seller Dashboard Components
+const WasteSellerDashboard = () => (
+  <DashboardLayout role="waste-seller">
+    <div className="space-y-4">
+      <h1 className="text-2xl font-bold">Waste Seller Dashboard</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">Total Waste Posted</h3>
+          <p className="text-2xl font-bold">120 kg</p>
+        </div>
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">CO₂ Saved</h3>
+          <p className="text-2xl font-bold">50 kg</p>
+        </div>
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">Pending Pickups</h3>
+          <p className="text-2xl font-bold">3</p>
+        </div>
       </div>
     </div>
-  );
-};
-
-// Placeholder dashboard components
-const WasteSellerDashboard = () => (
-  <DashboardLayout>
-    <h1 className="text-2xl font-bold mb-4">Waste Seller Dashboard</h1>
-    <p className="text-gray-600">Welcome to your waste seller dashboard!</p>
   </DashboardLayout>
 );
 
+// Waste Buyer Dashboard Components
 const WasteBuyerDashboard = () => (
-  <DashboardLayout>
-    <h1 className="text-2xl font-bold mb-4">Waste Buyer Dashboard</h1>
-    <p className="text-gray-600">Welcome to your waste buyer dashboard!</p>
+  <DashboardLayout role="waste-buyer">
+    <div className="space-y-4">
+      <h1 className="text-2xl font-bold">Waste Buyer Dashboard</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">Waste Processed</h3>
+          <p className="text-2xl font-bold">500 kg</p>
+        </div>
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">Active Orders</h3>
+          <p className="text-2xl font-bold">8</p>
+        </div>
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">Certifications</h3>
+          <p className="text-2xl font-bold">12</p>
+        </div>
+      </div>
+    </div>
   </DashboardLayout>
 );
 
+// Product Seller Dashboard Components
 const ProductSellerDashboard = () => (
-  <DashboardLayout>
-    <h1 className="text-2xl font-bold mb-4">Product Seller Dashboard</h1>
-    <p className="text-gray-600">Welcome to your product seller dashboard!</p>
+  <DashboardLayout role="product-seller">
+    <div className="space-y-4">
+      <h1 className="text-2xl font-bold">Product Seller Dashboard</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">Products Listed</h3>
+          <p className="text-2xl font-bold">25</p>
+        </div>
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">Total Sales</h3>
+          <p className="text-2xl font-bold">$1,200</p>
+        </div>
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">Active Orders</h3>
+          <p className="text-2xl font-bold">5</p>
+        </div>
+      </div>
+    </div>
   </DashboardLayout>
 );
 
+// Product Buyer Dashboard Components
 const ProductBuyerDashboard = () => (
-  <DashboardLayout>
-    <h1 className="text-2xl font-bold mb-4">Product Buyer Dashboard</h1>
-    <p className="text-gray-600">Welcome to your product buyer dashboard!</p>
+  <DashboardLayout role="product-buyer">
+    <div className="space-y-4">
+      <h1 className="text-2xl font-bold">Product Buyer Dashboard</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">Orders</h3>
+          <p className="text-2xl font-bold">15</p>
+        </div>
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">CO₂ Impact</h3>
+          <p className="text-2xl font-bold">30 kg</p>
+        </div>
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">Eco Points</h3>
+          <p className="text-2xl font-bold">450</p>
+        </div>
+      </div>
+    </div>
   </DashboardLayout>
 );
 
+// Delivery Dashboard Components
 const DeliveryDashboard = () => (
-  <DashboardLayout>
-    <h1 className="text-2xl font-bold mb-4">Delivery Volunteer Dashboard</h1>
-    <p className="text-gray-600">Welcome to your delivery dashboard!</p>
+  <DashboardLayout role="delivery">
+    <div className="space-y-4">
+      <h1 className="text-2xl font-bold">Delivery Dashboard</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">Available Tasks</h3>
+          <p className="text-2xl font-bold">8</p>
+        </div>
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">Completed Tasks</h3>
+          <p className="text-2xl font-bold">45</p>
+        </div>
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">Rating</h3>
+          <p className="text-2xl font-bold">4.8</p>
+        </div>
+      </div>
+    </div>
   </DashboardLayout>
 );
 
+// AI Assistant Dashboard Components
 const AIAssistantDashboard = () => (
-  <DashboardLayout>
-    <h1 className="text-2xl font-bold mb-4">AI Assistant Dashboard</h1>
-    <p className="text-gray-600">Welcome to your AI assistant dashboard!</p>
+  <DashboardLayout role="ai-assistant">
+    <div className="space-y-4">
+      <h1 className="text-2xl font-bold">AI Assistant Dashboard</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">Active Sessions</h3>
+          <p className="text-2xl font-bold">12</p>
+        </div>
+        <div className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-medium">Queries Resolved</h3>
+          <p className="text-2xl font-bold">156</p>
+        </div>
+      </div>
+    </div>
   </DashboardLayout>
 );
 
