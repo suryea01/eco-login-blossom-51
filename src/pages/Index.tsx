@@ -1,11 +1,29 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { LogoIcon } from "@/components/LogoIcon";
+import { LoginForm } from "@/components/LoginForm";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-white font-inter flex flex-col items-center justify-center p-6">
+      <div className="w-full max-w-sm space-y-6">
+        <div className="text-center">
+          <LogoIcon />
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">ECONIZHAI</h1>
+          <p className="text-gray-500 text-sm">Turning Waste into Wealth</p>
+        </div>
+
+        <LoginForm />
+
+        <p className="text-center text-xs text-gray-500 mt-8">
+          By continuing, you agree to our{" "}
+          <a href="#" className="text-eco-primary hover:text-eco-dark">
+            Terms
+          </a>{" "}
+          &{" "}
+          <a href="#" className="text-eco-primary hover:text-eco-dark">
+            Privacy Policy
+          </a>
+        </p>
       </div>
     </div>
   );
