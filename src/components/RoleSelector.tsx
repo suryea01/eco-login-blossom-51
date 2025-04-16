@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { RecycleBin, ShoppingBag, Truck, Bot, BadgeDollarSign, Leaf } from "lucide-react";
+import { Recycle, ShoppingBag, Truck, Bot, BadgeDollarSign, Leaf } from "lucide-react";
 
 interface Role {
   id: string;
@@ -19,7 +19,7 @@ export const RoleSelector = ({ onRoleSelect }: { onRoleSelect: (role: string) =>
       id: "waste-seller",
       title: "Waste Seller",
       description: "Sell your recyclable waste",
-      icon: RecycleBin
+      icon: Recycle
     },
     {
       id: "waste-buyer",
