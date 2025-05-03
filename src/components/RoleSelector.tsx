@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,6 +15,7 @@ interface Role {
 
 export const RoleSelector = ({ onRoleSelect }: { onRoleSelect: (role: string) => void }) => {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const navigate = useNavigate();
   
   const roles: Role[] = [
@@ -62,6 +63,12 @@ export const RoleSelector = ({ onRoleSelect }: { onRoleSelect: (role: string) =>
     }
   ];
 
+  useEffect(() => {
+    // Set animation to complete after roles have animated in
+    const timer = setTimeout(() => setIsAnimationComplete(true), roles.length * 100 + 400);
+    return () => clearTimeout(timer);
+  }, [roles.length]);
+
   const handleRoleSelection = (role: string) => {
     setSelectedRole(role);
   };
@@ -79,28 +86,39 @@ export const RoleSelector = ({ onRoleSelect }: { onRoleSelect: (role: string) =>
 
   return (
     <div className="space-y-6">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Select Your Role</h2>
-        <p className="text-gray-500 text-sm">Choose how you want to use ECONIZHAI</p>
+      <div className="text-center animate-[fadeIn_0.5s_ease-out]">
+        <h2 className="text-2xl font-bold mb-2">Select Your Role</h2>
+        <p className="text-muted-foreground text-sm">Choose how you want to use EcoLogin Blossom</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        {roles.map((role) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {roles.map((role, index) => (
           <Card 
             key={role.id}
-            className={`cursor-pointer transition-all ${
+            className={`cursor-pointer transition-all duration-300 ${
               selectedRole === role.id 
-                ? "border-2 border-eco-primary bg-eco-primary/5" 
-                : "border border-gray-200 hover:border-eco-primary/50"
-            }`}
+                ? "border-2 border-primary bg-primary/5 dark:bg-primary/20 shadow-md" 
+                : "border hover:border-primary/50 hover:-translate-y-1 hover:shadow-md"
+            } animate-[fadeIn_0.5s_ease-out]`}
+            style={{ animationDelay: `${index * 100}ms` }}
             onClick={() => handleRoleSelection(role.id)}
+            tabIndex={0}
+            role="button"
+            aria-pressed={selectedRole === role.id}
+            aria-label={`Select role: ${role.title}`}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                handleRoleSelection(role.id);
+                e.preventDefault();
+              }
+            }}
           >
             <CardContent className="p-4 flex flex-col items-center text-center">
-              <role.icon className={`w-8 h-8 mb-2 ${
-                selectedRole === role.id ? "text-eco-primary" : "text-gray-500"
+              <role.icon className={`w-8 h-8 mb-2 transition-colors duration-300 ${
+                selectedRole === role.id ? "text-primary" : "text-muted-foreground"
               }`} />
               <h3 className="font-medium text-sm">{role.title}</h3>
-              <p className="text-xs text-gray-500 mt-1">{role.description}</p>
+              <p className="text-xs text-muted-foreground mt-1">{role.description}</p>
             </CardContent>
           </Card>
         ))}
@@ -109,7 +127,10 @@ export const RoleSelector = ({ onRoleSelect }: { onRoleSelect: (role: string) =>
       <Button
         onClick={handleContinue}
         disabled={!selectedRole}
-        className="w-full h-12 bg-eco-primary hover:bg-eco-dark text-white transition-colors"
+        className={`w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-500 ${
+          isAnimationComplete ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+        } hover:shadow-lg hover:-translate-y-1 disabled:opacity-50 disabled:pointer-events-none`}
+        aria-label={selectedRole ? `Continue as ${roles.find(r => r.id === selectedRole)?.title}` : "Select a role to continue"}
       >
         Continue as {selectedRole ? roles.find(r => r.id === selectedRole)?.title : "Selected Role"}
       </Button>

@@ -1,8 +1,12 @@
 
-import React from 'react';
-import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
-import { Link } from 'react-router-dom';
-import { Home, Upload, Calendar, BarChart2, Award, MessageCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarTrigger, SidebarHeader } from "@/components/ui/sidebar";
+import { Link, useLocation } from 'react-router-dom';
+import { Home, Upload, Calendar, BarChart2, Award, MessageCircle, Menu, User, LogOut } from 'lucide-react';
+import { ThemeToggle } from './ThemeToggle';
+import { Button } from './ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -65,21 +69,35 @@ const getNavItems = (role: string): NavItem[] => {
 
 export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
   const navItems = getNavItems(role);
+  const location = useLocation();
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultCollapsed={window.innerWidth < 768}>
       <div className="min-h-screen flex w-full">
-        <Sidebar>
+        <Sidebar className="border-r border-border transition-all duration-300">
+          <SidebarHeader className="flex items-center p-4">
+            <div className="flex items-center gap-2 text-primary">
+              {role === 'waste-seller' && <Leaf className="w-6 h-6" />}
+              <span className="font-bold text-lg">EcoLogin</span>
+            </div>
+            <SidebarTrigger className="ml-auto md:flex" />
+          </SidebarHeader>
+          
           <SidebarContent>
             <SidebarGroup>
               <SidebarGroupContent>
                 <SidebarMenu>
                   {navItems.map((item) => (
                     <SidebarMenuItem key={item.path}>
-                      <SidebarMenuButton asChild>
-                        <Link to={item.path} className="flex items-center gap-2">
-                          <item.icon className="w-4 h-4" />
-                          <span>{item.title}</span>
+                      <SidebarMenuButton asChild active={location.pathname === item.path}>
+                        <Link 
+                          to={item.path} 
+                          className="flex items-center gap-2 group"
+                          onClick={() => setIsMobileSidebarOpen(false)}
+                        >
+                          <item.icon className="w-4 h-4 transition-transform group-hover:scale-110" />
+                          <span className="transition-all group-hover:translate-x-1">{item.title}</span>
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -87,12 +105,64 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
+
+            <div className="mt-auto p-4 border-t">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="w-full flex items-center justify-start gap-2 hover:bg-accent">
+                    <Avatar className="w-6 h-6">
+                      <AvatarImage src="/placeholder.svg" alt="User" />
+                      <AvatarFallback>U</AvatarFallback>
+                    </Avatar>
+                    <span>User Profile</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </SidebarContent>
         </Sidebar>
-        <main className="flex-1 p-6">
-          {children}
+        
+        <main className="flex-1 flex flex-col min-h-screen">
+          <header className="border-b p-4 flex items-center justify-between bg-background/80 backdrop-blur-sm sticky top-0 z-10">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              className="md:hidden"
+              onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+              aria-label="Toggle sidebar"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+            
+            <div className="font-medium text-lg hidden sm:block">
+              {navItems.find(item => item.path === location.pathname)?.title || 'Dashboard'}
+            </div>
+            
+            <div className="ml-auto flex items-center gap-2">
+              <ThemeToggle />
+            </div>
+          </header>
+          
+          <div className="flex-1 p-4 md:p-6 transition-all duration-300 animate-[fadeIn_0.3s_ease-out]">
+            {children}
+          </div>
         </main>
       </div>
     </SidebarProvider>
   );
 };
+
+// Add this import at the top
+import { Leaf } from 'lucide-react';
