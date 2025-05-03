@@ -1,6 +1,5 @@
 
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Recycle, ShoppingBag, Truck, Bot, BadgeDollarSign, Leaf } from "lucide-react";
@@ -16,7 +15,6 @@ interface Role {
 export const RoleSelector = ({ onRoleSelect }: { onRoleSelect: (role: string) => void }) => {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
-  const navigate = useNavigate();
   
   const roles: Role[] = [
     {
@@ -79,7 +77,11 @@ export const RoleSelector = ({ onRoleSelect }: { onRoleSelect: (role: string) =>
       if (selectedRoleData) {
         localStorage.setItem('userRole', selectedRole);
         onRoleSelect(selectedRole);
-        navigate(selectedRoleData.path);
+        // Instead of using navigate directly, we'll pass the path to the parent
+        // component through the onRoleSelect callback
+        if (typeof window !== 'undefined') {
+          window.location.href = selectedRoleData.path;
+        }
       }
     }
   };
