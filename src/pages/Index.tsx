@@ -2,7 +2,6 @@
 import { LogoIcon } from "@/components/LogoIcon";
 import { LoginForm } from "@/components/LoginForm";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Leaf } from "lucide-react";
 
 const Index = () => {
   return (
@@ -18,11 +17,6 @@ const Index = () => {
             ECOGREEN
           </h1>
           <p className="text-muted-foreground text-sm">Turning Waste into Wealth</p>
-          
-          <div className="mt-4 inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-xs text-primary animate-pulse">
-            <Leaf className="w-3 h-3" /> 
-            <span>Hackathon Edition</span>
-          </div>
         </div>
 
         <LoginForm />
