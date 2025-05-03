@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Upload, Calendar, BarChart2, Award, MessageCircle, Menu, User, LogOut } from 'lucide-react';
+import { Home, Upload, Calendar, BarChart2, Award, MessageCircle, Menu, User, LogOut, X } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { Button } from './ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
@@ -69,33 +70,74 @@ const getNavItems = (role: string): NavItem[] => {
 export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
   const navItems = getNavItems(role);
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(window.innerWidth < 768);
+  const [collapsed, setCollapsed] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if the device is mobile
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+      setCollapsed(window.innerWidth < 768);
+    };
+    
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
 
   return (
-    <div className="min-h-screen flex w-full">
+    <div className="min-h-screen flex w-full bg-background">
+      {/* Mobile sidebar overlay */}
+      {!collapsed && isMobile && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-20"
+          onClick={() => setCollapsed(true)}
+          aria-hidden="true"
+        />
+      )}
+      
       {/* Sidebar */}
-      <div className={`border-r border-border transition-all duration-300 bg-sidebar-background text-sidebar-foreground ${
-        collapsed ? "w-16" : "w-64"
-      }`}>
+      <div 
+        className={`fixed md:static inset-y-0 left-0 z-30 transition-all duration-300 bg-sidebar-background text-sidebar-foreground border-r border-border
+          ${collapsed ? "-translate-x-full md:translate-x-0 md:w-16" : "translate-x-0 w-64"}`}
+      >
         {/* Sidebar Header */}
         <div className="flex items-center p-4 border-b border-sidebar-border">
-          <div className={`flex items-center gap-2 text-primary ${collapsed ? "justify-center w-full" : ""}`}>
-            {role === 'waste-seller' && <Leaf className="w-6 h-6" />}
-            {!collapsed && <span className="font-bold text-lg">EcoLogin</span>}
+          <div className={`flex items-center gap-2 text-primary ${collapsed && !isMobile ? "justify-center w-full" : ""}`}>
+            <Leaf className="w-6 h-6" />
+            {(!collapsed || isMobile) && <span className="font-bold text-lg">ECOGREEN</span>}
           </div>
-          <Button
-            variant="ghost" 
-            size="icon"
-            className={`${collapsed ? "hidden" : "ml-auto"}`}
-            onClick={() => setCollapsed(true)}
-            aria-label="Collapse sidebar"
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
+          
+          {(!collapsed && isMobile) && (
+            <Button
+              variant="ghost" 
+              size="icon"
+              className="ml-auto"
+              onClick={() => setCollapsed(true)}
+              aria-label="Close sidebar"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          )}
+          
+          {(!collapsed && !isMobile) && (
+            <Button
+              variant="ghost" 
+              size="icon"
+              className="ml-auto"
+              onClick={() => setCollapsed(true)}
+              aria-label="Collapse sidebar"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          )}
         </div>
         
         {/* Sidebar Content */}
-        <div className="py-4">
+        <div className="py-4 overflow-y-auto max-h-[calc(100vh-4rem)]">
           <nav className="space-y-1 px-2">
             {navItems.map((item) => (
               <Link 
@@ -106,26 +148,27 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
                     ? "bg-sidebar-accent text-sidebar-accent-foreground" 
                     : "text-sidebar-foreground hover:bg-sidebar-accent/50"
                 }`}
+                onClick={() => isMobile && setCollapsed(true)}
               >
-                <item.icon className={`w-5 h-5 transition-transform ${collapsed ? "mx-auto" : ""}`} />
-                {!collapsed && <span className="transition-all group-hover:translate-x-1">{item.title}</span>}
+                <item.icon className={`w-5 h-5 transition-transform ${collapsed && !isMobile ? "mx-auto" : ""}`} />
+                {(!collapsed || isMobile) && <span className="transition-all group-hover:translate-x-1">{item.title}</span>}
               </Link>
             ))}
           </nav>
         </div>
 
         {/* Sidebar Footer */}
-        <div className="mt-auto p-4 border-t border-sidebar-border">
+        <div className="absolute bottom-0 w-full p-4 border-t border-sidebar-border">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className={`${
-                collapsed ? "w-full justify-center" : "w-full flex items-center justify-start"
+                collapsed && !isMobile ? "w-full justify-center" : "w-full flex items-center justify-start"
               } gap-2 hover:bg-accent`}>
                 <Avatar className="w-6 h-6">
                   <AvatarImage src="/placeholder.svg" alt="User" />
                   <AvatarFallback>U</AvatarFallback>
                 </Avatar>
-                {!collapsed && <span>User Profile</span>}
+                {(!collapsed || isMobile) && <span>User Profile</span>}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
@@ -145,7 +188,7 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
       </div>
       
       {/* Main Content */}
-      <main className="flex-1 flex flex-col min-h-screen">
+      <main className="flex-1 flex flex-col min-h-screen w-full">
         <header className="border-b p-4 flex items-center justify-between bg-background/80 backdrop-blur-sm sticky top-0 z-10">
           {collapsed && (
             <Button 
@@ -158,16 +201,16 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
             </Button>
           )}
           
-          <div className={`font-medium text-lg hidden sm:block ${collapsed ? "" : "ml-4"}`}>
+          <div className="font-medium text-lg hidden sm:block">
             {navItems.find(item => item.path === location.pathname)?.title || 'Dashboard'}
           </div>
           
-          <div className={`ml-auto flex items-center gap-2 ${collapsed ? "" : "mr-2"}`}>
+          <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />
           </div>
         </header>
         
-        <div className="flex-1 p-4 md:p-6 transition-all duration-300 animate-[fadeIn_0.3s_ease-out]">
+        <div className="flex-1 p-4 md:p-6 transition-all duration-300 animate-[fadeIn_0.3s_ease-out] w-full">
           {children}
         </div>
       </main>
