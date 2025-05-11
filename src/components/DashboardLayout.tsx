@@ -1,12 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Home, Upload, Calendar, BarChart2, Award, MessageCircle, Menu, User, LogOut, X } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Home, Upload, Calendar, BarChart2, Award, MessageCircle, Menu, User, LogOut, X, Settings, Send } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { Button } from './ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { Leaf } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -20,56 +21,55 @@ interface NavItem {
 }
 
 const getNavItems = (role: string): NavItem[] => {
-  switch (role) {
-    case 'waste-seller':
-      return [
-        { title: 'Dashboard', icon: Home, path: '/dashboard/waste-seller' },
-        { title: 'Upload Waste', icon: Upload, path: '/dashboard/waste-seller/upload' },
-        { title: 'Pickups', icon: Calendar, path: '/dashboard/waste-seller/pickups' },
-        { title: 'Statistics', icon: BarChart2, path: '/dashboard/waste-seller/stats' },
-        { title: 'Rewards', icon: Award, path: '/dashboard/waste-seller/rewards' }
-      ];
-    case 'waste-buyer':
-      return [
-        { title: 'Dashboard', icon: Home, path: '/dashboard/waste-buyer' },
-        { title: 'Marketplace', icon: Upload, path: '/dashboard/waste-buyer/marketplace' },
-        { title: 'Pickups', icon: Calendar, path: '/dashboard/waste-buyer/pickups' },
-        { title: 'Certifications', icon: Award, path: '/dashboard/waste-buyer/certs' }
-      ];
-    case 'product-seller':
-      return [
-        { title: 'Dashboard', icon: Home, path: '/dashboard/product-seller' },
-        { title: 'Post Product', icon: Upload, path: '/dashboard/product-seller/post' },
-        { title: 'Inventory', icon: BarChart2, path: '/dashboard/product-seller/inventory' },
-        { title: 'Orders', icon: Calendar, path: '/dashboard/product-seller/orders' }
-      ];
-    case 'product-buyer':
-      return [
-        { title: 'Dashboard', icon: Home, path: '/dashboard/product-buyer' },
-        { title: 'Marketplace', icon: Upload, path: '/dashboard/product-buyer/marketplace' },
-        { title: 'Orders', icon: Calendar, path: '/dashboard/product-buyer/orders' },
-        { title: 'Impact', icon: BarChart2, path: '/dashboard/product-buyer/impact' }
-      ];
-    case 'delivery':
-      return [
-        { title: 'Dashboard', icon: Home, path: '/dashboard/delivery' },
-        { title: 'Tasks', icon: Calendar, path: '/dashboard/delivery/tasks' },
-        { title: 'Schedule', icon: Calendar, path: '/dashboard/delivery/schedule' },
-        { title: 'Reviews', icon: MessageCircle, path: '/dashboard/delivery/reviews' }
-      ];
-    case 'ai-assistant':
-      return [
-        { title: 'Dashboard', icon: Home, path: '/dashboard/ai-assistant' },
-        { title: 'Chat', icon: MessageCircle, path: '/dashboard/ai-assistant/chat' }
-      ];
-    default:
-      return [];
-  }
+  const baseItems = [
+    { title: 'Dashboard', icon: Home, path: `/dashboard/${role}` },
+    { title: 'Profile', icon: User, path: '/profile' },
+    { title: 'Feedback', icon: Send, path: '/feedback' },
+  ];
+
+  const roleSpecificItems: Record<string, NavItem[]> = {
+    'waste-seller': [
+      { title: 'Upload Waste', icon: Upload, path: '/dashboard/waste-seller/upload' },
+      { title: 'Pickups', icon: Calendar, path: '/dashboard/waste-seller/pickups' },
+      { title: 'Statistics', icon: BarChart2, path: '/dashboard/waste-seller/stats' },
+      { title: 'Rewards', icon: Award, path: '/dashboard/waste-seller/rewards' }
+    ],
+    'waste-buyer': [
+      { title: 'Marketplace', icon: Upload, path: '/dashboard/waste-buyer/marketplace' },
+      { title: 'Pickups', icon: Calendar, path: '/dashboard/waste-buyer/pickups' },
+      { title: 'Certifications', icon: Award, path: '/dashboard/waste-buyer/certs' }
+    ],
+    'product-seller': [
+      { title: 'Post Product', icon: Upload, path: '/dashboard/product-seller/post' },
+      { title: 'Inventory', icon: BarChart2, path: '/dashboard/product-seller/inventory' },
+      { title: 'Orders', icon: Calendar, path: '/dashboard/product-seller/orders' }
+    ],
+    'product-buyer': [
+      { title: 'Marketplace', icon: Upload, path: '/dashboard/product-buyer/marketplace' },
+      { title: 'Orders', icon: Calendar, path: '/dashboard/product-buyer/orders' },
+      { title: 'Impact', icon: BarChart2, path: '/dashboard/product-buyer/impact' }
+    ],
+    'delivery': [
+      { title: 'Tasks', icon: Calendar, path: '/dashboard/delivery/tasks' },
+      { title: 'Schedule', icon: Calendar, path: '/dashboard/delivery/schedule' },
+      { title: 'Reviews', icon: MessageCircle, path: '/dashboard/delivery/reviews' }
+    ],
+    'ai-assistant': [
+      { title: 'Chat', icon: MessageCircle, path: '/dashboard/ai-assistant/chat' }
+    ]
+  };
+
+  return [
+    ...baseItems,
+    ...(roleSpecificItems[role] || []),
+  ];
 };
 
 export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
   const navItems = getNavItems(role);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { signOut, profile } = useAuth();
   const [collapsed, setCollapsed] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -87,6 +87,11 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
       window.removeEventListener('resize', checkIfMobile);
     };
   }, []);
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/auth');
+  };
 
   return (
     <div className="min-h-screen flex w-full bg-background">
@@ -165,7 +170,7 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
                 collapsed && !isMobile ? "w-full justify-center" : "w-full flex items-center justify-start"
               } gap-2 hover:bg-accent`}>
                 <Avatar className="w-6 h-6">
-                  <AvatarImage src="/placeholder.svg" alt="User" />
+                  <AvatarImage src={profile?.avatar_url || ""} alt="User" />
                   <AvatarFallback>U</AvatarFallback>
                 </Avatar>
                 {(!collapsed || isMobile) && <span>User Profile</span>}
@@ -174,11 +179,11 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/profile')}>
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={handleSignOut}>
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Log out</span>
               </DropdownMenuItem>
@@ -210,7 +215,7 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
           </div>
         </header>
         
-        <div className="flex-1 p-4 md:p-6 transition-all duration-300 animate-[fadeIn_0.3s_ease-out] w-full">
+        <div className="flex-1 p-4 md:p-6 transition-all duration-300 animate-[fadeIn_0.3s_ease-out] w-full overflow-y-auto">
           {children}
         </div>
       </main>
