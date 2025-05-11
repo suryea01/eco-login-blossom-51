@@ -48,7 +48,7 @@ const Index = () => {
         <div className="text-center animate-[fadeIn_0.5s_ease-out]">
           <LogoIcon />
           <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-eco-primary to-eco-accent bg-clip-text text-transparent">
-            ECOGREEN
+            ECONIZHAI
           </h1>
           <p className="text-muted-foreground text-sm">Turning Waste into Wealth</p>
         </div>
@@ -85,7 +85,7 @@ const Index = () => {
       </div>
       
       <footer className="absolute bottom-4 text-center text-xs text-muted-foreground">
-        <p>© 2025 EcoLogin Blossom. All rights reserved.</p>
+        <p>© 2025 ECONIZHAI. All rights reserved.</p>
       </footer>
     </div>
   );

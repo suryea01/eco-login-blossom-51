@@ -40,7 +40,7 @@ const Auth = () => {
       if (error) throw error;
       
       toast.success("Logged in successfully");
-      navigate("/");
+      navigate("/home");
     } catch (error: any) {
       toast.error(error.message || "An error occurred during login");
     } finally {
@@ -65,6 +65,7 @@ const Auth = () => {
       if (error) throw error;
       
       toast.success("Signup successful! Please check your email for verification.");
+      navigate("/home");
     } catch (error: any) {
       toast.error(error.message || "An error occurred during signup");
     } finally {
@@ -78,7 +79,7 @@ const Auth = () => {
         <div className="text-center mb-6">
           <LogoIcon />
           <h1 className="text-3xl font-bold bg-gradient-to-r from-eco-primary to-eco-accent bg-clip-text text-transparent">
-            ECOGREEN
+            ECONIZHAI
           </h1>
           <p className="text-muted-foreground text-sm">Turning Waste into Wealth</p>
         </div>
