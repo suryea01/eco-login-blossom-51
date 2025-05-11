@@ -3,3 +3,8 @@ project_id = "tedxdpnsuadpuqcwjptz"
 
 [functions.analyze-sentiment]
 verify_jwt = true
+
+[auth]
+# Disable email confirmations for testing
+enable_signup = true
+disable_signup_verification = true
