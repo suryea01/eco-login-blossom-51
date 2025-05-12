@@ -3,16 +3,16 @@ import { ProductType } from "./productTypes";
 
 export interface CartItemType {
   productId: string;
-  id: string; // Added id property for consistent referencing
+  id: string; // Unique identifier for the cart item
   name: string;
   price: number;
-  image: string;
-  images?: string[]; // Added images array as optional for compatibility
+  image: string; // Main product image
+  images?: string[]; // All product images
   quantity: number;
   ecoPoints: number;
   sellerId: string;
   sellerName: string;
-  seller?: { // Added optional seller object for compatibility
+  seller?: { // Optional seller object for compatibility
     name: string;
     id: string;
   }
