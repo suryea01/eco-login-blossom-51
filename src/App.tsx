@@ -20,6 +20,8 @@ import { wasteSellerRoutes } from "./routes/wasteSellerRoutes";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { CartProvider } from "./contexts/CartContext";
+import { MainLayout } from "./components/MainLayout";
+import { EcoChat } from "./components/EcoBot/EcoChat";
 
 // Protected route wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -83,7 +85,9 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
-              <AppRoutes />
+              <MainLayout>
+                <AppRoutes />
+              </MainLayout>
             </BrowserRouter>
           </TooltipProvider>
         </QueryClientProvider>
