@@ -67,7 +67,7 @@ const Products = () => {
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link to="/products" className={navigationMenuTriggerStyle({ className: "text-primary" })}>
+                <Link to="/products" className={navigationMenuTriggerStyle()}>
                   Marketplace
                 </Link>
               </NavigationMenuItem>
