@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LogoIcon } from "@/components/LogoIcon";
@@ -204,10 +203,10 @@ const Cart = () => {
               <div className="space-y-4">
                 {cart.map((item) => (
                   <CartItem 
-                    key={item.id}
+                    key={item.productId}
                     item={item}
-                    onRemove={() => removeFromCart(item.id)}
-                    onUpdateQuantity={(qty) => updateQuantity(item.id, qty)}
+                    onRemove={() => removeFromCart(item.productId)}
+                    onUpdateQuantity={(qty) => updateQuantity(item.productId, qty)}
                   />
                 ))}
               </div>

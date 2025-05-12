@@ -1,6 +1,7 @@
 
 import { createContext, useContext, useState } from "react";
 import { CartItemType, CartContextType } from "@/types/cartTypes";
+import { ProductType } from "@/types/productTypes";
 
 const CartContext = createContext<CartContextType>({
   cart: [],
@@ -10,39 +11,58 @@ const CartContext = createContext<CartContextType>({
   clearCart: () => {},
   totalItems: 0,
   totalPrice: 0,
-  totalEcoPoints: 0
+  totalEcoPoints: 0,
+  isCartOpen: false,
+  setIsCartOpen: () => {}
 });
 
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cart, setCart] = useState<CartItemType[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   
-  const addToCart = (item: CartItemType) => {
+  const addToCart = (product: ProductType, quantity: number) => {
     setCart(prev => {
       // Check if item already exists in cart
-      const existingItemIndex = prev.findIndex(cartItem => cartItem.id === item.id);
+      const existingItemIndex = prev.findIndex(cartItem => cartItem.productId === product.id);
       
       if (existingItemIndex >= 0) {
         // Update quantity if item exists
         const updatedCart = [...prev];
-        updatedCart[existingItemIndex].quantity += item.quantity;
+        updatedCart[existingItemIndex].quantity += quantity;
         return updatedCart;
       } else {
         // Add new item to cart
-        return [...prev, item];
+        const newCartItem: CartItemType = {
+          id: product.id,
+          productId: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.images[0] || "",
+          images: product.images,
+          quantity: quantity,
+          ecoPoints: product.ecoPoints,
+          sellerId: product.seller.id,
+          sellerName: product.seller.name,
+          seller: {
+            id: product.seller.id,
+            name: product.seller.name
+          }
+        };
+        return [...prev, newCartItem];
       }
     });
   };
   
-  const removeFromCart = (id: string) => {
-    setCart(prev => prev.filter(item => item.id !== id));
+  const removeFromCart = (productId: string) => {
+    setCart(prev => prev.filter(item => item.productId !== productId));
   };
   
-  const updateQuantity = (id: string, quantity: number) => {
+  const updateQuantity = (productId: string, quantity: number) => {
     setCart(prev => 
       prev.map(item => 
-        item.id === id ? { ...item, quantity } : item
+        item.productId === productId ? { ...item, quantity } : item
       )
     );
   };
@@ -73,7 +93,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         clearCart,
         totalItems,
         totalPrice,
-        totalEcoPoints
+        totalEcoPoints,
+        isCartOpen,
+        setIsCartOpen
       }}
     >
       {children}

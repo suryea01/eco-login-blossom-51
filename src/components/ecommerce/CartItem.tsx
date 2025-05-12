@@ -33,7 +33,7 @@ export const CartItem = ({ item, onRemove, onUpdateQuantity }: CartItemProps) =>
       <div className="flex flex-col sm:flex-row p-4">
         <div className="w-full sm:w-24 h-24 bg-muted/30 rounded-lg overflow-hidden flex-shrink-0">
           <img 
-            src={item.images[0]} 
+            src={item.image} 
             alt={item.name} 
             className="w-full h-full object-cover"
           />
@@ -42,7 +42,7 @@ export const CartItem = ({ item, onRemove, onUpdateQuantity }: CartItemProps) =>
         <div className="flex-grow flex flex-col sm:flex-row justify-between sm:items-center mt-4 sm:mt-0 sm:ml-4">
           <div className="sm:pr-6">
             <h3 className="font-medium">{item.name}</h3>
-            <p className="text-sm text-muted-foreground">Seller: {item.seller.name}</p>
+            <p className="text-sm text-muted-foreground">Seller: {item.sellerName}</p>
             
             <div className="flex items-center mt-1">
               <div className="text-xs bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-400 px-2 py-0.5 rounded-full flex items-center">

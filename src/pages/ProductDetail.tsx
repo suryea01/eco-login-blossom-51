@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { LogoIcon } from "@/components/LogoIcon";
@@ -45,10 +44,7 @@ const ProductDetail = () => {
   };
   
   const handleAddToCart = () => {
-    addToCart({
-      ...product,
-      quantity
-    });
+    addToCart(product, quantity);
     
     toast({
       title: "Product added to cart",

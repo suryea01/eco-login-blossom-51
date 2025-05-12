@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LogoIcon } from "@/components/LogoIcon";
@@ -402,7 +401,7 @@ const Checkout = () => {
                   {/* Cart items summary */}
                   <div className="space-y-3">
                     {cart.slice(0, 3).map((item) => (
-                      <div key={item.id} className="flex justify-between items-center">
+                      <div key={item.productId} className="flex justify-between items-center">
                         <div className="flex items-center gap-2">
                           <div className="w-2 h-2 rounded-full bg-primary"></div>
                           <span className="text-sm truncate">
