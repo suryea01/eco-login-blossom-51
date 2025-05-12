@@ -10,7 +10,14 @@ import {
 } from "lucide-react";
 import { ProductGrid } from "@/components/ecommerce/ProductGrid";
 import { ProductFilters } from "@/components/ecommerce/ProductFilters";
-import { Pagination } from "@/components/ui/pagination";
+import { 
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationEllipsis
+} from "@/components/ui/pagination";
 
 const Products = () => {
   const { user, signOut } = useAuth();
@@ -221,28 +228,26 @@ const Products = () => {
             {/* Pagination */}
             <div className="mt-8">
               <Pagination>
-                <div className="flex justify-center">
-                  <Pagination.Content>
-                    <Pagination.Item>
-                      <Pagination.Link isActive href="#">1</Pagination.Link>
-                    </Pagination.Item>
-                    <Pagination.Item>
-                      <Pagination.Link href="#">2</Pagination.Link>
-                    </Pagination.Item>
-                    <Pagination.Item>
-                      <Pagination.Link href="#">3</Pagination.Link>
-                    </Pagination.Item>
-                    <Pagination.Item>
-                      <Pagination.Ellipsis />
-                    </Pagination.Item>
-                    <Pagination.Item>
-                      <Pagination.Link href="#">8</Pagination.Link>
-                    </Pagination.Item>
-                    <Pagination.Item>
-                      <Pagination.Next href="#" />
-                    </Pagination.Item>
-                  </Pagination.Content>
-                </div>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationLink isActive href="#">1</PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink href="#">2</PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink href="#">3</PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink href="#">8</PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationNext href="#" />
+                  </PaginationItem>
+                </PaginationContent>
               </Pagination>
             </div>
           </div>
